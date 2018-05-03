@@ -752,29 +752,16 @@ public class ClientUI
 
 		revalidateMinimumSize();
 
-		int decrement = value;
-		boolean forcedWidthDecrease = false;
-		if (config.automaticResizeType() == ExpandResizeType.KEEP_WINDOW_SIZE)
+		if (config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE)
 		{
-			int minimumWidth = frame.getMinimumSize().width;
-			int currentWidth = frame.getWidth();
-			if (currentWidth - value <= minimumWidth)
-			{
-				forcedWidthDecrease = true;
-				decrement = currentWidth - minimumWidth;
-			}
-		}
-
-		if (forcedWidthDecrease || config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE)
-		{
-			int newWindowWidth = frame.getWidth() - decrement;
+			int newWindowWidth = frame.getWidth() - value;
 			int newWindowX = frame.getX();
 			Rectangle screenBounds = frame.getGraphicsConfiguration().getBounds();
 			boolean wasCloseToLeftEdge = Math.abs(frame.getX() - screenBounds.getX()) <= SCREEN_EDGE_CLOSE_DISTANCE;
 			if (isFrameCloseToRightEdge() && (expandedClientOppositeDirection || !wasCloseToLeftEdge))
 			{
 				// Keep the distance to the right edge
-				newWindowX += decrement;
+				newWindowX += value;
 			}
 
 			frame.setBounds(newWindowX, frame.getY(), newWindowWidth, frame.getHeight());
