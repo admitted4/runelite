@@ -54,7 +54,7 @@ public interface RuneLiteConfig extends Config
 	)
 	default ExpandResizeType automaticResizeType()
 	{
-		return ExpandResizeType.KEEP_WINDOW_SIZE;
+		return ExpandResizeType.KEEP_GAME_SIZE;
 	}
 
 	@ConfigItem(
