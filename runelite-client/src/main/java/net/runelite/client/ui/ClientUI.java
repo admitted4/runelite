@@ -351,6 +351,7 @@ public class ClientUI
 					{
 						toggleSidebar();
 					}
+
 					contract();
 
 					saveClientBoundsConfig();
@@ -687,13 +688,22 @@ public class ClientUI
 		pluginPanel = null;
 	}
 
-	private void expandFrameBy(int value)
+	private boolean isFrameCloseToRightEdge()
+	{
+		Rectangle screenBounds = frame.getGraphicsConfiguration().getBounds();
+		return Math.abs((frame.getX() + frame.getWidth()) -
+			(screenBounds.getX() + screenBounds.getWidth())) <= SCREEN_EDGE_CLOSE_DISTANCE;
+	}
+
+	private void expandFrameBy(final int value)
 	{
 		if (isFullScreen())
 		{
 			return;
 		}
 
+
+		int increment = value;
 		boolean forcedWidthIncrease = false;
 		if (config.automaticResizeType() == ExpandResizeType.KEEP_WINDOW_SIZE)
 		{
@@ -702,29 +712,28 @@ public class ClientUI
 			if (minimumWidth > currentWidth)
 			{
 				forcedWidthIncrease = true;
-				value = minimumWidth - currentWidth;
+				increment = minimumWidth - currentWidth;
 			}
 		}
 
 		if (forcedWidthIncrease || config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE)
 		{
-			int newWindowWidth = frame.getWidth() + value;
+			int newWindowWidth = frame.getWidth() + increment;
 			int newWindowX = frame.getX();
 			Rectangle screenBounds = frame.getGraphicsConfiguration().getBounds();
-			boolean isCloseToEdge = Math.abs((frame.getX() + frame.getWidth()) -
-				(screenBounds.getX() + screenBounds.getWidth())) <= SCREEN_EDGE_CLOSE_DISTANCE;
 			boolean wouldExpandThroughEdge = frame.getX() + newWindowWidth >
 				screenBounds.getX() + screenBounds.getWidth();
-			if (!isCloseToEdge && wouldExpandThroughEdge)
-			{
-				// Move the window to the edge
-				newWindowX = (int)(screenBounds.getX() + screenBounds.getWidth()) - frame.getWidth();
-			}
 			if (wouldExpandThroughEdge)
 			{
+				if (!isFrameCloseToRightEdge())
+				{
+					// Move the window to the edge
+					newWindowX = (int)(screenBounds.getX() + screenBounds.getWidth()) - frame.getWidth();
+				}
+
 				// Expand the window to the left as the user probably don't want the
 				// window to go through the screen
-				newWindowX -= value;
+				newWindowX -= increment;
 
 				expandedClientOppositeDirection = true;
 			}
@@ -734,7 +743,7 @@ public class ClientUI
 		revalidateMinimumSize();
 	}
 
-	private void contractFrameBy(int value)
+	private void contractFrameBy(final int value)
 	{
 		if (isFullScreen())
 		{
@@ -743,6 +752,7 @@ public class ClientUI
 
 		revalidateMinimumSize();
 
+		int decrement = value;
 		boolean forcedWidthDecrease = false;
 		if (config.automaticResizeType() == ExpandResizeType.KEEP_WINDOW_SIZE)
 		{
@@ -751,22 +761,20 @@ public class ClientUI
 			if (currentWidth - value <= minimumWidth)
 			{
 				forcedWidthDecrease = true;
-				value = currentWidth - minimumWidth;
+				decrement = currentWidth - minimumWidth;
 			}
 		}
 
 		if (forcedWidthDecrease || config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE)
 		{
-			int newWindowWidth = frame.getWidth() - value;
+			int newWindowWidth = frame.getWidth() - decrement;
 			int newWindowX = frame.getX();
 			Rectangle screenBounds = frame.getGraphicsConfiguration().getBounds();
-			boolean wasCloseToRightEdge = Math.abs((frame.getX() + frame.getWidth()) -
-				(screenBounds.getX() + screenBounds.getWidth())) <= SCREEN_EDGE_CLOSE_DISTANCE;
 			boolean wasCloseToLeftEdge = Math.abs(frame.getX() - screenBounds.getX()) <= SCREEN_EDGE_CLOSE_DISTANCE;
-			if (wasCloseToRightEdge && (expandedClientOppositeDirection || !wasCloseToLeftEdge))
+			if (isFrameCloseToRightEdge() && (expandedClientOppositeDirection || !wasCloseToLeftEdge))
 			{
 				// Keep the distance to the right edge
-				newWindowX += value;
+				newWindowX += decrement;
 			}
 
 			frame.setBounds(newWindowX, frame.getY(), newWindowWidth, frame.getHeight());
