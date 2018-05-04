@@ -103,7 +103,6 @@ public interface RuneLiteConfig extends Config
 	}
 
 	@ConfigItem(
-	@ConfigItem(
 		keyName = "notificationFocused",
 		name = "Send notifications when focused",
 		description = "Toggles idle notifications for when the client is focused",
@@ -119,7 +118,6 @@ public interface RuneLiteConfig extends Config
 		name = "Request focus on notification",
 		description = "Toggles window focus request",
 		position = 8
-		position = 8
 	)
 	default boolean requestFocusOnNotification()
 	{
@@ -130,7 +128,6 @@ public interface RuneLiteConfig extends Config
 		keyName = "fontType",
 		name = "Dynamic Overlay Font",
 		description = "Configures what font type is used for in-game overlays such as player name, ground items, etc.",
-		position = 9
 		position = 9
 	)
 	default FontType fontType()
@@ -143,7 +140,6 @@ public interface RuneLiteConfig extends Config
 		name = "Display infoboxes vertically",
 		description = "Toggles the infoboxes to display vertically",
 		position = 10
-		position = 10
 	)
 	default boolean infoBoxVertical()
 	{
@@ -154,7 +150,6 @@ public interface RuneLiteConfig extends Config
 		keyName = "infoBoxWrap",
 		name = "Infobox wrap count",
 		description = "Configures the amount of infoboxes shown before wrapping",
-		position = 11
 		position = 11
 	)
 	default int infoBoxWrap()
@@ -167,7 +162,6 @@ public interface RuneLiteConfig extends Config
 		name = "Contain in screen",
 		description = "Makes the client stay contained in the screen when attempted to move out of it.<br>Note: Only works if custom chrome is enabled.",
 		position = 12
-		position = 12
 	)
 	default boolean containInScreen()
 	{
@@ -178,7 +172,6 @@ public interface RuneLiteConfig extends Config
 		keyName = "rememberScreenBounds",
 		name = "Remember client position",
 		description = "Save the position and size of the client after exiting",
-		position = 13
 		position = 13
 	)
 	default boolean rememberScreenBounds()
