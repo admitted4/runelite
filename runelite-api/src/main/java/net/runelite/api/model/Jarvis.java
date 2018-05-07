@@ -73,7 +73,7 @@ public class Jarvis
 				}
 
 				int cp = crossProduct(current, p, next);
-				if (cp > 0 || (cp == 0 && current.distanceTo(p) > current.distanceTo(next)))
+				if (cp > 0 || (cp == 0 && current.euclideanDistance(p) > current.euclideanDistance(next)))
 				{
 					next = p;
 				}

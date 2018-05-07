@@ -45,4 +45,6 @@ public enum OverlayLayer
 	 * Render overlay above all game elements
 	 */
 	ALWAYS_ON_TOP,
+
+	ABOVE_MINIMAP,
 }

@@ -496,4 +496,20 @@ public class Hooks
 		GraphicsObjectCreated event = new GraphicsObjectCreated(go);
 		eventBus.post(event);
 	}
+
+	public static void onAfterRenderMinimap(Widget var0, int var1, int var2, int var3)
+	{
+		MainBufferProvider bufferProvider = (MainBufferProvider) client.getBufferProvider();
+		BufferedImage image = (BufferedImage) bufferProvider.getImage();
+		Graphics2D graphics2d = (Graphics2D) image.getGraphics();
+
+		try
+		{
+			renderer.render(graphics2d, OverlayLayer.ABOVE_MINIMAP);
+		}
+		catch (Exception ex)
+		{
+			log.warn("Error during overlay rendering", ex);
+		}
+	}
 }

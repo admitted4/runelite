@@ -24,10 +24,15 @@
  */
 package net.runelite.api;
 
+import lombok.Getter;
+
 public class Point
 {
-	private final int x;
-	private final int y;
+	@Getter
+	protected final int x;
+
+	@Getter
+	protected final int y;
 
 	public Point(int x, int y)
 	{
@@ -41,25 +46,40 @@ public class Point
 		return "Point{" + "x=" + x + ", y=" + y + '}';
 	}
 
-	public int getX()
-	{
-		return x;
-	}
-
-	public int getY()
-	{
-		return y;
-	}
-
 	/**
 	 * Find the distance from this point to another point
 	 *
 	 * @param other
 	 * @return
 	 */
-	public int distanceTo(Point other)
+	public double euclideanDistance(Point other)
 	{
-		return (int) Math.hypot(getX() - other.getX(), getY() - other.getY());
+		return Math.hypot(getX() - other.getX(), getY() - other.getY());
+	}
+
+	public int chebyshevDistance(Point other)
+	{
+		return Math.max(Math.abs(this.x - other.x), Math.abs(this.y - other.y));
+	}
+
+	/**
+	 * Moves the Point to the nearest edge if it is outside the area.
+	 *
+	 * @param minX The west border of the area
+	 * @param maxX The east border of the area
+	 * @param minY The south border of the area
+	 * @param maxY The north border of the area
+	 * @return Returns the moved WorldPoint
+	 */
+	public Point clamp(int minX, int maxX, int minY, int maxY)
+	{
+		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
+		{
+			return this;
+		}
+		return new Point(
+			Math.max(Math.min(maxX, x), minX),
+			Math.max(Math.min(maxY, y), minY));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 import java.util.Comparator;
 import net.runelite.mapping.Export;
+import net.runelite.mapping.Hook;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
@@ -57,6 +58,8 @@ final class class18 implements Comparator {
       signature = "(Liz;IIII)V",
       garbageValue = "-622984876"
    )
+   @Export("renderMinimap")
+   @Hook(value = "onAfterRenderMinimap", end = true)
    static final void method151(Widget var0, int var1, int var2, int var3) {
       class36.method545();
       class236 var4 = var0.method4542(false);

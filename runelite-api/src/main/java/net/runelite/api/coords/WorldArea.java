@@ -200,175 +200,183 @@ public class WorldArea
 	 * @return Returns true if it's possible to travel in specified direction
 	 */
 	public boolean canTravelInDirection(Client client, int dx, int dy,
-										Predicate<? super WorldPoint> extraCondition)
+		Predicate<? super WorldPoint> extraCondition)
 	{
-		dx = Integer.signum(dx);
-		dy = Integer.signum(dy);
+		// TODO: Make a better fix for this
+		try
+		{
+			dx = Integer.signum(dx);
+			dy = Integer.signum(dy);
 
-		if (dx == 0 && dy == 0)
-		{
-			return true;
-		}
-
-		LocalPoint lp = LocalPoint.fromWorld(client, x, y);
-
-		int startX = lp.getRegionX() + dx;
-		int startY = lp.getRegionY() + dy;
-		int checkX = startX + (dx > 0 ? width - 1 : 0);
-		int checkY = startY + (dy > 0 ? height - 1 : 0);
-		int endX = startX + width - 1;
-		int endY = startY + height - 1;
-
-		int xFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int yFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int xyFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int xWallFlagsSouth = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int xWallFlagsNorth = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int yWallFlagsWest = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-		int yWallFlagsEast = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-
-		if (dx < 0)
-		{
-			xFlags |= CollisionDataFlag.BLOCK_MOVEMENT_EAST;
-			xWallFlagsSouth |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH |
-				CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
-			xWallFlagsNorth |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH |
-				CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
-		}
-		if (dx > 0)
-		{
-			xFlags |= CollisionDataFlag.BLOCK_MOVEMENT_WEST;
-			xWallFlagsSouth |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH |
-				CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
-			xWallFlagsNorth |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH |
-				CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
-		}
-		if (dy < 0)
-		{
-			yFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH;
-			yWallFlagsWest |= CollisionDataFlag.BLOCK_MOVEMENT_WEST |
-				CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
-			yWallFlagsEast |= CollisionDataFlag.BLOCK_MOVEMENT_EAST |
-				CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
-		}
-		if (dy > 0)
-		{
-			yFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH;
-			yWallFlagsWest |= CollisionDataFlag.BLOCK_MOVEMENT_WEST |
-				CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
-			yWallFlagsEast |= CollisionDataFlag.BLOCK_MOVEMENT_EAST |
-				CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
-		}
-		if (dx < 0 && dy < 0)
-		{
-			xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
-		}
-		if (dx < 0 && dy > 0)
-		{
-			xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
-		}
-		if (dx > 0 && dy < 0)
-		{
-			xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
-		}
-		if (dx > 0 && dy > 0)
-		{
-			xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
-		}
-
-		CollisionData[] collisionData = client.getCollisionMaps();
-		int[][] collisionDataFlags = collisionData[plane].getFlags();
-
-		if (dx != 0)
-		{
-			// Check that the area doesn't bypass a wall
-			for (int y = startY; y <= endY; y++)
+			if (dx == 0 && dy == 0)
 			{
-				if ((collisionDataFlags[checkX][y] & xFlags) != 0 ||
-					!extraCondition.test(WorldPoint.fromRegion(client, checkX, y, plane)))
+				return true;
+			}
+
+			LocalPoint lp = LocalPoint.fromWorld(client, x, y);
+
+			int startX = lp.getRegionX() + dx;
+			int startY = lp.getRegionY() + dy;
+			int checkX = startX + (dx > 0 ? width - 1 : 0);
+			int checkY = startY + (dy > 0 ? height - 1 : 0);
+			int endX = startX + width - 1;
+			int endY = startY + height - 1;
+
+			int xFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int yFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int xyFlags = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int xWallFlagsSouth = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int xWallFlagsNorth = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int yWallFlagsWest = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+			int yWallFlagsEast = CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+
+			if (dx < 0)
+			{
+				xFlags |= CollisionDataFlag.BLOCK_MOVEMENT_EAST;
+				xWallFlagsSouth |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH |
+					CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
+				xWallFlagsNorth |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH |
+					CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
+			}
+			if (dx > 0)
+			{
+				xFlags |= CollisionDataFlag.BLOCK_MOVEMENT_WEST;
+				xWallFlagsSouth |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH |
+					CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
+				xWallFlagsNorth |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH |
+					CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
+			}
+			if (dy < 0)
+			{
+				yFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH;
+				yWallFlagsWest |= CollisionDataFlag.BLOCK_MOVEMENT_WEST |
+					CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
+				yWallFlagsEast |= CollisionDataFlag.BLOCK_MOVEMENT_EAST |
+					CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
+			}
+			if (dy > 0)
+			{
+				yFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH;
+				yWallFlagsWest |= CollisionDataFlag.BLOCK_MOVEMENT_WEST |
+					CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
+				yWallFlagsEast |= CollisionDataFlag.BLOCK_MOVEMENT_EAST |
+					CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
+			}
+			if (dx < 0 && dy < 0)
+			{
+				xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST;
+			}
+			if (dx < 0 && dy > 0)
+			{
+				xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST;
+			}
+			if (dx > 0 && dy < 0)
+			{
+				xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST;
+			}
+			if (dx > 0 && dy > 0)
+			{
+				xyFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST;
+			}
+
+			CollisionData[] collisionData = client.getCollisionMaps();
+			int[][] collisionDataFlags = collisionData[plane].getFlags();
+
+			if (dx != 0)
+			{
+				// Check that the area doesn't bypass a wall
+				for (int y = startY; y <= endY; y++)
 				{
-					// Collision while attempting to travel along the x axis
-					return false;
+					if ((collisionDataFlags[checkX][y] & xFlags) != 0 ||
+						!extraCondition.test(WorldPoint.fromRegion(client, checkX, y, plane)))
+					{
+						// Collision while attempting to travel along the x axis
+						return false;
+					}
+				}
+
+				// Check that the new area tiles don't contain a wall
+				for (int y = startY + 1; y <= endY; y++)
+				{
+					if ((collisionDataFlags[checkX][y] & xWallFlagsSouth) != 0)
+					{
+						// The new area tiles contains a wall
+						return false;
+					}
+				}
+				for (int y = endY - 1; y >= startY; y--)
+				{
+					if ((collisionDataFlags[checkX][y] & xWallFlagsNorth) != 0)
+					{
+						// The new area tiles contains a wall
+						return false;
+					}
 				}
 			}
-
-			// Check that the new area tiles don't contain a wall
-			for (int y = startY + 1; y <= endY; y++)
+			if (dy != 0)
 			{
-				if ((collisionDataFlags[checkX][y] & xWallFlagsSouth) != 0)
+				// Check that the area tiles don't bypass a wall
+				for (int x = startX; x <= endX; x++)
 				{
-					// The new area tiles contains a wall
-					return false;
+					if ((collisionDataFlags[x][checkY] & yFlags) != 0 ||
+						!extraCondition.test(WorldPoint.fromRegion(client, x, checkY, client.getPlane())))
+					{
+						// Collision while attempting to travel along the y axis
+						return false;
+					}
+				}
+
+				// Check that the new area tiles don't contain a wall
+				for (int x = startX + 1; x <= endX; x++)
+				{
+					if ((collisionDataFlags[x][checkY] & yWallFlagsWest) != 0)
+					{
+						// The new area tiles contains a wall
+						return false;
+					}
+				}
+				for (int x = endX - 1; x >= startX; x--)
+				{
+					if ((collisionDataFlags[x][checkY] & yWallFlagsEast) != 0)
+					{
+						// The new area tiles contains a wall
+						return false;
+					}
 				}
 			}
-			for (int y = endY - 1; y >= startY; y--)
+			if (dx != 0 && dy != 0)
 			{
-				if ((collisionDataFlags[checkX][y] & xWallFlagsNorth) != 0)
+				if ((collisionDataFlags[checkX][checkY] & xyFlags) != 0 ||
+					!extraCondition.test(WorldPoint.fromRegion(client, checkX, checkY, client.getPlane())))
 				{
-					// The new area tiles contains a wall
+					// Collision while attempting to travel diagonally
 					return false;
+				}
+
+				// When the areas edge size is 1 and it attempts to travel
+				// diagonally, a collision check is done for respective
+				// x and y axis as well.
+				if (width == 1)
+				{
+					if ((collisionDataFlags[checkX][checkY - dy] & xFlags) != 0 &&
+						extraCondition.test(WorldPoint.fromRegion(client, checkX, startY, client.getPlane())))
+					{
+						return false;
+					}
+				}
+				if (height == 1)
+				{
+					if ((collisionDataFlags[checkX - dx][checkY] & yFlags) != 0 &&
+						extraCondition.test(WorldPoint.fromRegion(client, startX, checkY, client.getPlane())))
+					{
+						return false;
+					}
 				}
 			}
 		}
-		if (dy != 0)
+		catch (ArrayIndexOutOfBoundsException ex)
 		{
-			// Check that the area tiles don't bypass a wall
-			for (int x = startX; x <= endX; x++)
-			{
-				if ((collisionDataFlags[x][checkY] & yFlags) != 0 ||
-					!extraCondition.test(WorldPoint.fromRegion(client, x, checkY, client.getPlane())))
-				{
-					// Collision while attempting to travel along the y axis
-					return false;
-				}
-			}
-
-			// Check that the new area tiles don't contain a wall
-			for (int x = startX + 1; x <= endX; x++)
-			{
-				if ((collisionDataFlags[x][checkY] & yWallFlagsWest) != 0)
-				{
-					// The new area tiles contains a wall
-					return false;
-				}
-			}
-			for (int x = endX - 1; x >= startX; x--)
-			{
-				if ((collisionDataFlags[x][checkY] & yWallFlagsEast) != 0)
-				{
-					// The new area tiles contains a wall
-					return false;
-				}
-			}
-		}
-		if (dx != 0 && dy != 0)
-		{
-			if ((collisionDataFlags[checkX][checkY] & xyFlags) != 0 ||
-				!extraCondition.test(WorldPoint.fromRegion(client, checkX, checkY, client.getPlane())))
-			{
-				// Collision while attempting to travel diagonally
-				return false;
-			}
-
-			// When the areas edge size is 1 and it attempts to travel
-			// diagonally, a collision check is done for respective
-			// x and y axis as well.
-			if (width == 1)
-			{
-				if ((collisionDataFlags[checkX][checkY - dy] & xFlags) != 0 &&
-					extraCondition.test(WorldPoint.fromRegion(client, checkX, startY, client.getPlane())))
-				{
-					return false;
-				}
-			}
-			if (height == 1)
-			{
-				if ((collisionDataFlags[checkX - dx][checkY] & yFlags) != 0 &&
-					extraCondition.test(WorldPoint.fromRegion(client, startX, checkY, client.getPlane())))
-				{
-					return false;
-				}
-			}
+			return false;
 		}
 
 		return true;

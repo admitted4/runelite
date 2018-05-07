@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.Point;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -68,7 +69,7 @@ public class TitheFarmPlantOverlay extends Overlay
 			{
 				continue;
 			}
-			net.runelite.api.Point canvasLocation = Perspective.worldToCanvas(client, localLocation.getX(), localLocation.getY(), client.getPlane());
+			Point canvasLocation = Perspective.worldToCanvas(client, localLocation.getX(), localLocation.getY(), client.getPlane());
 			if (viewport != null && canvasLocation != null)
 			{
 				switch (plant.getState())
@@ -89,7 +90,7 @@ public class TitheFarmPlantOverlay extends Overlay
 		return null;
 	}
 
-	private void drawTimerOnPlant(Graphics2D graphics, TitheFarmPlant plant, net.runelite.api.Point loc, Color color)
+	private void drawTimerOnPlant(Graphics2D graphics, TitheFarmPlant plant, Point loc, Color color)
 	{
 		//Construct the arc
 		Arc2D.Float arc = new Arc2D.Float(Arc2D.PIE);

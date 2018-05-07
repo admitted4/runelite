@@ -34,6 +34,7 @@ import net.runelite.api.NPC;
 import net.runelite.api.ObjectComposition;
 import static net.runelite.api.ObjectID.*;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.Point;
 import net.runelite.api.coords.WorldPoint;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 import net.runelite.client.plugins.cluescrolls.ClueScrollPlugin;
@@ -390,7 +391,7 @@ public class CrypticClue extends ClueScroll implements TextClueScroll, NpcClueSc
 		// Mark game object
 		if (objectId != -1)
 		{
-			net.runelite.api.Point mousePosition = plugin.getClient().getMouseCanvasPosition();
+			Point mousePosition = plugin.getClient().getMouseCanvasPosition();
 
 			if (plugin.getObjectsToMark() != null)
 			{

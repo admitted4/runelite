@@ -83,6 +83,27 @@ public class WorldPoint
 		return new WorldPoint(x, y, plane + dz);
 	}
 
+	/**
+	 * Moves the WorldPoint to the nearest edge if it is outside the area.
+	 *
+	 * @param minX The west border of the area
+	 * @param maxX The east border of the area
+	 * @param minY The south border of the area
+	 * @param maxY The north border of the area
+	 * @return Returns the moved WorldPoint
+	 */
+	public WorldPoint clamp(int minX, int maxX, int minY, int maxY)
+	{
+		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
+		{
+			return this;
+		}
+		return new WorldPoint(
+			Math.max(Math.min(maxX, x), minX),
+			Math.max(Math.min(maxY, y), minY),
+			plane);
+	}
+
 	public static boolean isInScene(Client client, int x, int y)
 	{
 		int baseX = client.getBaseX();

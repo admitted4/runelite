@@ -37,6 +37,7 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Player;
 import net.runelite.api.WallObject;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -71,7 +72,7 @@ class BarrowsOverlay extends Overlay
 			List<NPC> npcs = client.getNpcs();
 			for (NPC npc : npcs)
 			{
-				net.runelite.api.Point minimapLocation = npc.getMinimapLocation();
+				Point minimapLocation = npc.getMinimapLocation();
 				if (minimapLocation != null)
 				{
 					graphics.setColor(Color.yellow);
@@ -118,7 +119,7 @@ class BarrowsOverlay extends Overlay
 
 	private void renderWalls(Graphics2D graphics, WallObject wall)
 	{
-		net.runelite.api.Point minimapLocation = wall.getMinimapLocation();
+		Point minimapLocation = wall.getMinimapLocation();
 
 		if (minimapLocation == null)
 		{
@@ -142,7 +143,7 @@ class BarrowsOverlay extends Overlay
 
 	private void renderLadders(Graphics2D graphics, GameObject ladder)
 	{
-		net.runelite.api.Point minimapLocation = ladder.getMinimapLocation();
+		Point minimapLocation = ladder.getMinimapLocation();
 
 		if (minimapLocation == null)
 		{
@@ -170,7 +171,7 @@ class BarrowsOverlay extends Overlay
 			}
 
 			String brotherLetter = Character.toString(brother.getName().charAt(0));
-			net.runelite.api.Point minimapText = Perspective.getCanvasTextMiniMapLocation(client, graphics,
+			Point minimapText = Perspective.getCanvasTextMiniMapLocation(client, graphics,
 				localLocation, brotherLetter);
 
 			if (minimapText != null)
